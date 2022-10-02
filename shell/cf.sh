@@ -3,8 +3,8 @@
 version=20220615
 
 function bettercloudflareip(){
-read -p "请设置期望的带宽大小(默认最小1,单位 Mbps):" bandwidth
-read -p "请设置RTT测试进程数(默认10,最大50):" tasknum
+bandwidth=300
+tasknum=10
 if [ -z "$bandwidth" ]
 then
 	bandwidth=1
@@ -33,6 +33,7 @@ cloudflaretest
 realbandwidth=$[$max/128]
 endtime=$(date +%s)
 echo "从服务器获取详细信息"
+echo "$anycast"
 curl --$ips --resolve service.baipiaocf.ml:443:$anycast --retry 1 -s -X POST https://service.baipiaocf.ml -o temp.txt --connect-timeout 2 --max-time 3
 clear
 if [ ! -f "temp.txt" ]
@@ -323,7 +324,7 @@ do
 	echo "3. 单IP测速"
 	echo "4. 清空缓存"
 	echo "0. 退出"
-	read -p "请选择菜单(默认1): " menu
+	menu=$1
 	if [ -z "$menu" ]
 	then
 		menu=1
